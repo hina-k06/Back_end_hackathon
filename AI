@@ -1,0 +1,29 @@
+import requests
+
+# This function will pass your text to the machine learning model
+# and return the top result with the highest confidence
+def classify(text):
+    key = "4c54f7b0-105a-11eb-b202-1317cac500d186c5bc1a-75ba-4bf9-adb5-da2e62d7189f"
+    url = "https://machinelearningforkids.co.uk/api/scratch/"+ key + "/classify"
+
+    response = requests.get(url, params={ "data" : text })
+
+    if response.ok:
+        responseData = response.json()
+        topMatch = responseData[0]
+        return topMatch
+    else:
+        response.raise_for_status()
+
+
+# CHANGE THIS to something you want your machine learning model to classify
+demo = classify(input("What possible symptoms do you have? "))
+
+label = demo["class_name"]
+confidence = demo["confidence"]
+if label == "bipolar_disorder":
+    label = "bipolar disorder"
+
+
+# CHANGE THIS to do something different with the result
+print ("result: '%s' with %d%% confidence" % (label, confidence))
